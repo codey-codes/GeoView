@@ -20,8 +20,8 @@ import { EVENT_NAMES } from "../../../api/event";
 import { Panel, ButtonGroup, Button } from "../../../ui";
 
 import { Cast, TypeButtonPanel } from "../../types/cgpv-types";
+import { ImportantDevices } from "@mui/icons-material";
 
-const navBtnWidth = "38px";
 const useStyles = makeStyles((theme) => ({
   navBarRef: {
     display: "flex",
@@ -39,34 +39,35 @@ const useStyles = makeStyles((theme) => ({
   },
   navBtnGroup: {
     margin: theme.spacing(3),
-    width: navBtnWidth,
+    width: theme.overrides.button.size.width,
+    boxShadow: "none",
     "& > button": {
-      width: navBtnWidth,
-      maxWidth: navBtnWidth,
-      minWidth: navBtnWidth,
-      padding: theme.spacing(5, 5, 5),
-      height: "initial",
-      borderRadius: theme.spacing(5),
+      width: theme.overrides.button.size.width,
+      minWidth: theme.overrides.button.size.width + " !important",
+      height: theme.overrides.button.size.width,
+      boxShadow:
+        "0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%) !important;",
+      padding: theme.spacing(5, 5, 5) + " !important",
       "&:first-child": {
-        margin: theme.spacing(0, 0, 1, 0),
+        margin: theme.spacing(0, 0, 1, 0) + " !important",
+        borderRadius: theme.spacing(5) + " !important", // if not defined, MUI overrides the default border radius
       },
       "&:last-child": {
-        margin: theme.spacing(1, 0, 0, 0),
+        margin: theme.spacing(1, 0, 0, 0) + " !important",
+        borderRadius: theme.spacing(5) + " !important", // if not defined, MUI overrides the default border radius
       },
-    },
-    "& > button.MuiButtonGroup-groupedVertical:not(:first-child)": {
-      borderTopLeftRadius: theme.spacing(5),
-      borderTopRightRadius: theme.spacing(5),
-    },
-    "& > button.MuiButtonGroup-groupedVertical:not(:last-child)": {
-      borderBottomLeftRadius: theme.spacing(5),
-      borderBottomRightRadius: theme.spacing(5),
+      "&:not(:first-child):not(:last-child)": {
+        margin: theme.spacing(1, 0, 1, 0) + " !important",
+        borderRadius: theme.spacing(5) + " !important",
+      },
+      "& svg": {
+        // MUI v5 is changing the icon size to more than 24px
+        width: "24px !important",
+        height: "24px !important",
+      },
     },
   },
   navBarButton: {
-    height: "initial",
-    paddingLeft: "initial",
-    paddingRight: "initial",
     backgroundColor: "rgba(255,255,255,1)",
     color: theme.palette.primary.contrastText,
     borderRadius: theme.spacing(5),

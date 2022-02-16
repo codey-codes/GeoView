@@ -2,7 +2,7 @@ import { CSSProperties, useCallback, useEffect, useRef, useState } from "react";
 
 import { useTheme } from "@mui/material/styles";
 
-import makeStyles from '@mui/styles/makeStyles';
+import makeStyles from "@mui/styles/makeStyles";
 
 import { Map, LatLng, LatLngExpression, CRS, Point, Icon } from "leaflet";
 import { useMapEvent, Marker, useMap } from "react-leaflet";
@@ -19,8 +19,8 @@ const useStyles = makeStyles((theme) => ({
     left: "50%", // theme.shape.center,
   },
   northArrow: {
-    width: 42, //(theme.overrides?.northArrow?.size as CSSProperties).width,
-    height: 42, //(theme.overrides?.northArrow?.size as CSSProperties).height,
+    width: (theme.overrides?.northArrow?.size as CSSProperties).width,
+    height: (theme.overrides?.northArrow?.size as CSSProperties).height,
   },
 }));
 

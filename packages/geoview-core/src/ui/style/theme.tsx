@@ -1,13 +1,17 @@
 import { CSSProperties } from "react";
 
-import { createTheme, DeprecatedThemeOptions, adaptV4Theme, Variant, TypographyStyleOptions } from "@mui/material/styles";
+import {
+  createTheme,
+  Variant,
+  TypographyStyleOptions,
+} from "@mui/material/styles";
 
 const headingStyles = {
   fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
   fontWeight: 700,
 };
 
-const themeOptions: DeprecatedThemeOptions = {
+const themeOptions = {
   palette: {
     primary: {
       light: "#ffffff",
@@ -153,4 +157,4 @@ export const styles: Record<string, CSSProperties> = {
   },
 };
 
-export const theme = createTheme(adaptV4Theme(themeOptions));
+export const theme = createTheme(themeOptions);

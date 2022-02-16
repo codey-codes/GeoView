@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { useMap } from "react-leaflet";
 
-import makeStyles from '@mui/styles/makeStyles';
+import makeStyles from "@mui/styles/makeStyles";
 import { Drawer as MaterialDrawer } from "@mui/material";
 
 import { api } from "../../api/api";
@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
   drawerOpen: {
     width: drawerWidth,
+    position: "relative",
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
@@ -34,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
+    position: "relative",
     overflowX: "hidden",
     width: "61px",
     "& $toolbar": {
@@ -133,7 +135,8 @@ export const Drawer = (props: DrawerProps): JSX.Element => {
           onClick={() => {
             openCloseDrawer(!open);
           }}
-          size="large">
+          size="large"
+        >
           {!open ? <ChevronRightIcon /> : <ChevronLeftIcon />}
         </IconButton>
       </div>

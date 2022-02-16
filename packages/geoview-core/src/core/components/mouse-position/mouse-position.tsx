@@ -1,6 +1,6 @@
 import { useCallback, useState, useEffect, useRef } from "react";
 
-import makeStyles from '@mui/styles/makeStyles';
+import makeStyles from "@mui/styles/makeStyles";
 
 import { useTranslation } from "react-i18next";
 
@@ -16,10 +16,10 @@ const useStyles = makeStyles((theme) => ({
   mouseposition: {
     position: "absolute",
     right: "120px !important",
+    height: 20,
     zIndex: theme.zIndex.leafletControl,
     textAlign: "center",
     bottom: theme.spacing(0),
-    marginBottom: theme.spacing(),
     padding: theme.spacing(2),
     display: "flex !important",
     flexDirection: "column",

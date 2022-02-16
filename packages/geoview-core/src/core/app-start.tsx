@@ -19,7 +19,10 @@ import { MapViewer } from "../geo/map/map";
 
 declare module "@mui/styles/defaultTheme" {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  interface DefaultTheme extends Theme {}
+  interface DefaultTheme extends Theme {
+    shape?: Object | any;
+    overrides?: Object | any;
+  }
 }
 
 /**
