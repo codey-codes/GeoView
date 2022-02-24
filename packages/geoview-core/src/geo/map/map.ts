@@ -92,6 +92,9 @@ export class MapViewer {
   // i18n instance
   i18nInstance!: i18n;
 
+  // modals creations
+  modals!: any
+
   /**
    * Add the map instance to the maps array in the api
    *

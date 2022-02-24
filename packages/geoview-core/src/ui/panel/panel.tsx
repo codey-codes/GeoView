@@ -19,7 +19,7 @@ import { api } from "../../api/api";
 import { EVENT_NAMES } from "../../api/event";
 import { HtmlToReact } from "../../core/containers/html-to-react";
 
-import { IconButton, CloseIcon, Divider, Fade } from "..";
+import { IconButton, CloseIcon, Divider } from "..";
 import { styles } from "../style/theme";
 
 const useStyles = makeStyles((theme) => ({

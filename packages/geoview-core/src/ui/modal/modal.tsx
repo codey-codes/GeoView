@@ -1,7 +1,7 @@
 import { CSSProperties } from "react";
 
 import {
-  Dialog as MaterialDialog,
+  Dialog,
   DialogTitle,
   DialogContent,
   DialogContentText,
@@ -57,7 +57,7 @@ interface DialogProps extends Omit<MaterialDialogProps, "title"> {
  * @param {DialogProps} props the properties passed to the Dialog element
  * @returns {JSX.Element} the created Dialog element
  */
-export const Dialog = (props: DialogProps): JSX.Element => {
+export const Modal = (props: DialogProps): JSX.Element => {
   const {
     title,
     titleId,
@@ -78,7 +78,7 @@ export const Dialog = (props: DialogProps): JSX.Element => {
   const classes = useStyles();
 
   return (
-    <MaterialDialog
+    <Dialog
       open={open}
       className={classes.dialog + " " + (className && className)}
       style={{ ...style, position: "absolute" }}
@@ -105,6 +105,6 @@ export const Dialog = (props: DialogProps): JSX.Element => {
         </DialogContentText>
       </DialogContent>
       <DialogActions>{actions}</DialogActions>
-    </MaterialDialog>
+    </Dialog>
   );
 };

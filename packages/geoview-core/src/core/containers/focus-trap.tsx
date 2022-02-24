@@ -11,7 +11,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { api } from "../../api/api";
 import { EVENT_NAMES } from "../../api/event";
 
-import { Dialog, Button } from "../../ui";
+import { Modal, Button } from "../../ui";
 
 const useStyles = makeStyles((theme) => ({
   trap: {
@@ -166,7 +166,7 @@ export function FocusTrapDialog(props: FocusTrapProps): JSX.Element {
   }, []);
 
   return (
-    <Dialog
+    <Modal
       container={document.getElementsByClassName("llwp-map")[0]}
       open={open}
       aria-labelledby="wcag-dialog-title"
