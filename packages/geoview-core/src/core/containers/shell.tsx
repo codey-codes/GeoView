@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 import { useTranslation } from "react-i18next";
 
@@ -13,7 +13,7 @@ import { FocusTrapDialog } from "./focus-trap";
 import { api } from "../../api/api";
 import { EVENT_NAMES } from "../../api/event";
 
-import { CircularProgress } from "../../ui";
+import { CircularProgress, Modal } from "../../ui";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -69,6 +69,8 @@ export function Shell(props: ShellProps): JSX.Element {
   // set the active trap value for FocusTrap and pass the callback to the dialog window
   const [activeTrap, setActivetrap] = useState(false);
 
+  const [update, setUpdate] = useState<number>(0);
+
   /**
    * Set the focus trap
    * @param {boolean} dialogTrap the callback value from dialog trap
@@ -76,6 +78,10 @@ export function Shell(props: ShellProps): JSX.Element {
   function handleCallback(dialogTrap: boolean): void {
     setActivetrap(dialogTrap);
   }
+
+  const updateShell = useCallback(() => {
+    setUpdate((prevState) => ++prevState);
+  }, [update]);
 
   // show a splash screen before map is loaded
   const [isLoaded, setIsLoaded] = useState(false);
@@ -87,6 +93,16 @@ export function Shell(props: ShellProps): JSX.Element {
         if (payload && payload.handlerName.includes(id)) {
           // even if the map loads some layers (basemap) are not finish rendering. Same for north arrow
           setIsLoaded(true);
+        }
+      },
+      id
+    );
+
+    api.event.on(
+      EVENT_NAMES.EVENT_MODAL_CREATE,
+      (payload) => {
+        if (payload.handlerName === id) {
+          updateShell();
         }
       },
       id
@@ -120,6 +136,11 @@ export function Shell(props: ShellProps): JSX.Element {
           basemapOptions={config.basemapOptions}
           plugins={config.plugins}
         />
+        {Object.keys(api.map(id).modal.modals).map((modalId) => {
+          const modal = api.map(id).modal.modals[modalId];
+
+          return <Modal key={modalId} id={modalId} open={false} mapId={id} />;
+        })}
         <FocusTrapDialog id={id} callback={handleCallback} />
         <a
           id={`bottomlink-${id}`}

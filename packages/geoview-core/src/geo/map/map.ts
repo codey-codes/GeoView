@@ -25,6 +25,7 @@ import { generateId } from "../../core/utils/utilities";
 import { EVENT_NAMES } from "../../api/event";
 import { AppbarButtons } from "../../core/components/appbar/app-bar-buttons";
 import { NavbarButtons } from "../../core/components/navbar/nav-bar-buttons";
+import { ModalApi, typeModalProps } from "../../ui";
 
 // LCC map options
 // ! Map bounds doesn't work for projection other then Web Mercator
@@ -92,8 +93,8 @@ export class MapViewer {
   // i18n instance
   i18nInstance!: i18n;
 
-  // modals creations
-  modals!: any
+  // modals creation
+  modal!: ModalApi;
 
   /**
    * Add the map instance to the maps array in the api
@@ -113,6 +114,7 @@ export class MapViewer {
     this.i18nInstance = i18n;
     this.currentZoom = mapProps.zoom;
     this.currentPosition = new LatLng(mapProps.center[0], mapProps.center[1]);
+    this.modal = new ModalApi(this.id);
   }
 
   /**

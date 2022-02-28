@@ -98,7 +98,6 @@ export class NavbarButtons {
           this.mapId
         );
       }
-
       // add the new button panel to the correct group
       this.buttons[groupName][buttonProps.id] = buttonPanel;
 

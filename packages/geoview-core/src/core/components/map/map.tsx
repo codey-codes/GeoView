@@ -28,6 +28,8 @@ import { EVENT_NAMES } from "../../../api/event";
 
 import { MapViewer } from "../../../geo/map/map";
 
+import { Modal } from "../../../ui";
+
 import {
   TypeMapConfigProps,
   TypeBasemapLayer,
