@@ -26,6 +26,7 @@ const useStyles = makeStyles((theme) => {
       zIndex: -1,
       height: "100%",
       pointerEvents: "none",
+      position: "relative",
     },
     skip: {
       position: "absolute",
@@ -79,6 +80,7 @@ export function Shell(props: ShellProps): JSX.Element {
     setActivetrap(dialogTrap);
   }
 
+  // CHANGED
   const updateShell = useCallback(() => {
     setUpdate((prevState) => ++prevState);
   }, [update]);
@@ -98,6 +100,7 @@ export function Shell(props: ShellProps): JSX.Element {
       id
     );
 
+    // CHANGED
     api.event.on(
       EVENT_NAMES.EVENT_MODAL_CREATE,
       (payload) => {
@@ -136,9 +139,9 @@ export function Shell(props: ShellProps): JSX.Element {
           basemapOptions={config.basemapOptions}
           plugins={config.plugins}
         />
+
         {Object.keys(api.map(id).modal.modals).map((modalId) => {
           const modal = api.map(id).modal.modals[modalId];
-
           return <Modal key={modalId} id={modalId} open={false} mapId={id} />;
         })}
         <FocusTrapDialog id={id} callback={handleCallback} />

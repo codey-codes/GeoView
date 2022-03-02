@@ -1,12 +1,4 @@
-import React, {
-  CSSProperties,
-  useRef,
-  useState,
-  useEffect,
-  useCallback,
-} from "react";
-
-import { useMap } from "react-leaflet";
+import React, { CSSProperties, useState, useEffect } from "react";
 
 import {
   Dialog,
@@ -21,8 +13,9 @@ import makeStyles from "@mui/styles/makeStyles";
 import { EVENT_NAMES } from "../../api/event";
 
 import { TypeChildren } from "../../core/types/cgpv-types";
-import { typeModalProps, ModalApi } from ".";
+import { typeModalProps } from ".";
 import { api } from "../../api/api";
+import { Button, CloseIcon, IconButton } from "..";
 
 const useStyles = makeStyles((theme) => ({
   dialog: {
@@ -34,6 +27,30 @@ const useStyles = makeStyles((theme) => ({
   },
   content: {
     padding: theme.spacing(5),
+  },
+  //   createdModal: {
+  //     "& .MuiDialog-container .MuiPaper-root > *": {
+  //       margin: "-5px",
+  //     },
+  //   },
+  createdTitle: {
+    display: "flex",
+    justifyContent: "space-between",
+  },
+  createdContent: {
+    display: "block",
+    minWidth: 500,
+    minHeight: 40,
+  },
+  createdClosedModal: {
+    display: "none",
+  },
+  createdAction: {
+    width: `30%`,
+    alignSelf: "flex-end",
+    "& > * ": {
+      textAlign: "center",
+    },
   },
 }));
 
@@ -101,36 +118,95 @@ export const Modal = (props: DialogProps): JSX.Element => {
     mapId,
   } = props;
 
-  /**
-   * Are we going to open multiple modals at the same time? In this case MOdal.tsx will need to be an array
-   */
+  const classes = useStyles();
 
   useEffect(() => {
+    // TO OPEN THE MODAL
     api.event.on(
       EVENT_NAMES.EVENT_MODAL_OPEN,
       (args) => {
-        console.log(args);
         if (id === args.id && args.handlerName === mapId) {
           modalID = args.id;
-
           const modal = api.map(mapId).modal.modals[modalID] as typeModalProps;
-          console.log("ARGS", args);
+          // To check if any other modals are open
+          const openModals = Object.values(api.map(mapId).modal.modals).filter(
+            (modal) => modal.active
+          );
+          // this openEvent will be passed into the Dialog and has nothing to do with closing the current modals
           if (args.open) openEvent = true;
+          // To close currently opened modals
+          openModals.forEach((openModal) => {
+            if (openModal.id !== modal.id) openModal.close();
+          });
 
-          setCreatedModal(<Dialog open={true}>{modal.content}</Dialog>);
+          setCreatedModal(
+            <Dialog
+              open={openEvent}
+              onClose={modal.close}
+              container={document.querySelector(`#${modal.mapId}`)}
+              className={`${classes.dialog} ${className && className}`}
+              aria-labelledby={props["aria-labelledby"]}
+              aria-describedby={props["aria-describedby"]}
+              fullScreen={fullScreen}
+              BackdropProps={{
+                classes: { root: classes.backdrop },
+              }}
+            >
+              <DialogTitle className={classes.createdTitle}>
+                {modal.header?.title || null}
+                <IconButton onClick={modal.close}>
+                  {modal.header?.action || <CloseIcon />}
+                </IconButton>
+              </DialogTitle>
+              <DialogContent className={classes.createdContent}>
+                <DialogContentText>{modal.content || null}</DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                {modal.footer?.actions.map((a: any) => {
+                  return (
+                    <Button
+                      key={a}
+                      onClick={modal.close}
+                      type="text"
+                      tooltipPlacement="top"
+                      tooltip={a}
+                      className={classes.createdAction}
+                    >
+                      {a.toUpperCase()}
+                    </Button>
+                  );
+                }) || null}
+              </DialogActions>
+            </Dialog>
+          );
         }
       },
       mapId
     );
-    console.log("WORKED");
+
+    // TO CLOSE THE MODAL
+    api.event.on(
+      EVENT_NAMES.EVENT_MODAL_CLOSE,
+      (args) => {
+        if (id === args.id && args.handlerName === mapId) {
+          modalID = args.id;
+          if (!args.open) openEvent = false;
+          setCreatedModal(
+            <Dialog
+              open={openEvent}
+              className={classes.createdClosedModal}
+            ></Dialog>
+          );
+        }
+      },
+      mapId
+    );
 
     return () => {
       api.event.off(EVENT_NAMES.EVENT_MODAL_OPEN, modalID);
       api.event.off(EVENT_NAMES.EVENT_MODAL_CLOSE, modalID);
     };
   }, []);
-
-  const classes = useStyles();
 
   return createdModal ? (
     createdModal

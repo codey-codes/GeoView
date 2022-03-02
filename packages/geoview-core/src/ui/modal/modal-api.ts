@@ -1,13 +1,10 @@
-// import { Modal } from ".";
 import { api } from "../../api/api";
 import { EVENT_NAMES } from "../../api/event";
 import { generateId } from "../../core/utils/utilities";
-// import React from "react";
-// React.ReactNode | Element
 
 interface modalHeader {
   title: string | undefined;
-  action: string | undefined; // <button></button>
+  action: JSX.Element | undefined; // <button></button>
 }
 
 interface modalFooter {
@@ -16,10 +13,12 @@ interface modalFooter {
 
 export type typeModalProps = {
   id?: string | undefined;
-  header?: modalHeader | string | undefined;
+  header?: modalHeader | string | undefined | any;
   content: string | undefined;
-  footer?: modalFooter | string | undefined;
-  status?: boolean | undefined;
+  footer?: modalFooter | string | undefined | any;
+  active?: boolean | undefined;
+  close?: undefined | any;
+
   mapId?: string;
 };
 
@@ -28,7 +27,8 @@ class ModalModel {
   header?: modalHeader | string | undefined;
   content: string | undefined;
   footer?: modalFooter | string | undefined;
-  status?: boolean | undefined;
+  active?: boolean | undefined;
+
   mapId?: string;
 
   constructor(content: string) {
@@ -36,34 +36,41 @@ class ModalModel {
     this.header = undefined;
     this.content = content;
     this.footer = undefined;
-    this.status = false;
+    this.active = undefined;
+
     this.mapId = undefined;
   }
 
   open = (): void => {
-    this.status = true;
+    this.active = true;
     api.event.emit(EVENT_NAMES.EVENT_MODAL_OPEN, this.mapId, {
       id: this.id,
       open: true,
     });
-    console.log("OPENING MODAL", this.status);
   };
 
   close = (): void => {
-    this.status = false;
+    this.active = false;
     api.event.emit(EVENT_NAMES.EVENT_MODAL_CLOSE, this.mapId, {
       id: this.id,
       open: false,
     });
-    console.log("CLOSING MODAL", this.status);
   };
 
   update = (modal: typeModalProps): void => {
+    if (
+      typeof modal.header?.action === "string" ||
+      typeof modal.header?.action === "number" ||
+      typeof modal.header?.action === "object"
+    ) {
+      alert("Header action needs to be a JSX element");
+      modal.header.actions = undefined;
+    }
     this.id = modal.id || this.id;
     this.header = modal.header || this.header;
     this.content = modal.content || this.content;
     this.footer = modal.footer || this.footer;
-    this.status = modal.status || this.status;
+    this.active = modal.active || this.active;
   };
 }
 
@@ -78,6 +85,14 @@ export class ModalApi {
 
   createModal = (modal: typeModalProps): void => {
     if (!modal.content) return;
+    if (
+      typeof modal.header?.action === "string" ||
+      typeof modal.header?.action === "number" ||
+      typeof modal.header?.action === "object"
+    ) {
+      alert("Header action needs to be a JSX element");
+      modal.header.action = undefined;
+    }
     const id = modal.id ? modal.id : generateId("");
     this.modals[id] = new ModalModel(modal.content);
     this.modals[id].id = id;
@@ -85,7 +100,6 @@ export class ModalApi {
     this.modals[id].header = modal.header || this.modals[id].header;
     this.modals[id].content = modal.content;
     this.modals[id].footer = modal.footer || this.modals[id].footer;
-    this.modals[id].status = modal.status || this.modals[id].status;
 
     api.event.emit(EVENT_NAMES.EVENT_MODAL_CREATE, this.mapId, {});
   };
